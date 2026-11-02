@@ -88,6 +88,10 @@ const PANEL_GROUPS = [
     ],
   },
   {
+    label: msg('Nature'),
+    ids: ['nature'],
+  },
+  {
     label: msg('Utilities'),
     ids: ['directions', 'radio'],
   },

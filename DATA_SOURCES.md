@@ -423,6 +423,70 @@ This implementation is original; those contributions have not been merged here.
 - **Coverage:** 110°E across the Pacific/Americas to 0°, 25°S–80°N. Display exact advertised
   observations; ten-minute metadata refresh, source-matched colors, bounded shared imagery cache.
 
+## Nature timeline sources
+
+### NOAA Coral Reef Watch (coral heat stress)
+
+- **Sources:** CRW 5 km v3.1 Degree Heating Weeks rendered by the
+  [PacIOOS ERDDAP `dhw_5km` dataset](https://pae-paha.pacioos.hawaii.edu/erddap/griddap/dhw_5km.html)
+  through the same-origin `/api/coral/dhw` tile proxy (ERDDAP answers bursts with
+  429 "one request at a time", so the proxy asks two tiles at a time, retries 429/5xx
+  with backoff and keeps an in-memory LRU of 600 tiles), and the
+  [CRW Regional Virtual Stations](https://coralreefwatch.noaa.gov/product/vs/data.php)
+  (`vs_polygons.json` and per-station daily `.txt` files) through the keyless
+  same-origin `/api/coral` proxy (no CORS upstream; 6 h station / 12 h history cache).
+- **Rights/credit:** U.S. public domain (NOAA); "NOAA Coral Reef Watch". No endorsement implied.
+- **Meaning:** satellite heat stress on ~5 km pixels and ~200 regional station averages,
+  1985 to present with a ~1–3 day lag. Not observed bleaching: DHW skill at predicting
+  bleaching is modest and near chance on reefs whose warmest month is ≥29 °C.
+  Station alert levels follow the virtual-station scale (0–4 at the time of writing).
+
+### NASA GIBS (fires, vegetation, land cover, mangroves, sea temperature)
+
+- **Sources:** [NASA GIBS](https://gibs.earthdata.nasa.gov) WMTS (EPSG:3857) and WMS (EPSG:4326, for
+  the VIIRS S-NPP thermal-anomaly vector layer rendered to PNG). Layers:
+  `GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies`, `VIIRS_SNPP_Thermal_Anomalies_375m_All`,
+  `OPERA_L3_DIST-ALERT-HLS_Color_Index`, `MODIS_Terra_L3_NDVI_16Day`,
+  `MODIS_Combined_L3_IGBP_Land_Cover_Type_Annual`, `Mangrove_Forest_Distribution_2000`.
+  Keyless, browser-direct (CORS `*`). The date slider uses each layer's GIBS DescribeDomains
+  time list (`…/1.0.0/{layer}/default/{matrix}/all/all.xml`), because GIBS skips days
+  (for example VIIRS has no data from 2022-07-27 to 2022-08-22) and a missing day draws blank.
+- **Rights/credit:** U.S. public domain (NASA data); the GIBS acknowledgement shown for Recent Imagery
+  applies. Mangrove distribution: Giri et al. (2011), NASA SEDAC.
+- **Meaning:** each product states its resolution and caveat in the panel (for example, a fire pixel is
+  a 375 m detection, not a burn perimeter; DIST-ALERT shows vegetation loss, not its cause).
+
+### 3D before/after imagery (Nature timeline)
+
+- **Sentinel-2 cloudless** by EOX IT Services GmbH ([s2maps.eu](https://s2maps.eu)): yearly
+  cloud-free 10 m mosaics 2016–2025 from `tiles.maps.eox.at` WMTS (Web Mercator), keyless,
+  CORS-enabled. Credit "Sentinel-2 cloudless – https://s2maps.eu by EOX IT Services GmbH
+  (contains modified Copernicus Sentinel data {year})". Licence: 2016 CC BY 4.0; 2017 onward
+  CC BY-NC-SA 4.0 (non-commercial). A year's mosaic picks the clearest pixel per place, so the
+  date is a year, not a day.
+- **Esri World Imagery Wayback**: dated releases of Esri World Imagery since 2014, listed by
+  `waybackconfig.json` and tiled from `wayback.maptiles.arcgis.com` (keyless, CORS `*`); the
+  real capture date, provider and resolution under the view come from each release's
+  `metadata.maptiles.arcgis.com` identify endpoint. Esri terms of use apply, as for the Esri
+  basemap. A release date is a publication date; unchanged areas repeat across releases.
+
+### Underwater 3D coral scans (Nature timeline)
+
+- **Wildflow × Soneva Coral Reef Time-Series Photogrammetry**
+  ([Hugging Face](https://huggingface.co/datasets/wildflow/soneva-corals)), CC BY 4.0: diver
+  photogrammetry of fixed reef plots at Soneva Fushi, Baa Atoll, Maldives, surveyed 3–4 times
+  between June 2025 and March 2026, with 3D Gaussian splats at five detail levels per survey.
+  `/api/reef-scans` (`server/providers/reefScans.js`) downloads one catalogued survey's PLY on
+  first request (lod3 ≈ 30 MB, lod2 ≈ 130 MB), converts it to glTF with
+  `KHR_gaussian_splatting` + SPZ compression (the form Cesium's splat renderer reads; colour
+  harmonics dropped), and caches the result in `.gev-cache/reef-scans/` (≈ 2 MB and ≈ 8 MB per
+  survey). Surveys of one plot share a frame: their height maps agree to 2–5 cm, so the date
+  buttons compare the same coral. Placement uses the dataset's one GPS corner per plot (good to a
+  few metres, heading assumed north-up) and terrain-sampled sea level. Plot OOTB R is left out
+  because its recorded corner is invalid.
+- Curated 3D places (Jasper 2024 fire, Kangaroo Island 2019–20 fire, Rondônia clearing,
+  Hooghly estuary mangroves) were checked by eye for visible change between their two sources.
+
 ### Community weather prior art
 
 The weather design builds on Gustavo Beneduzi's retained GFS/ECMWF contribution

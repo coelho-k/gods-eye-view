@@ -147,6 +147,22 @@ export const DATA_CREDITS = [
       '(API documentation and rate limits)',
   },
   {
+    key: 'noaa-crw',
+    html: 'Coral heat stress: NOAA Coral Reef Watch 5 km v3.1 (<a href="https://coralreefwatch.noaa.gov" target="_blank" rel="noopener">coralreefwatch.noaa.gov</a>), served by PacIOOS ERDDAP',
+  },
+  {
+    key: 'eox-s2cloudless',
+    html: 'Before/after: Sentinel-2 cloudless – <a href="https://s2maps.eu" target="_blank" rel="noopener">s2maps.eu</a> by EOX IT Services GmbH (contains modified Copernicus Sentinel data), CC BY 4.0 (2016) / CC BY-NC-SA 4.0 (2017+)',
+  },
+  {
+    key: 'esri-wayback',
+    html: 'Before/after: Esri World Imagery Wayback (Esri, Maxar, Earthstar Geographics)',
+  },
+  {
+    key: 'wildflow-soneva',
+    html: 'Underwater 3D coral scans: <a href="https://huggingface.co/datasets/wildflow/soneva-corals" target="_blank" rel="noopener">Wildflow × Soneva coral reef time series</a>, CC BY 4.0',
+  },
+  {
     key: 'usgs',
     html: 'Earthquakes: Data courtesy of the U.S. Geological Survey',
   },

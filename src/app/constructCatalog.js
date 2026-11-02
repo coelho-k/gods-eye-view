@@ -30,6 +30,7 @@ import { createApplicationGnssIntegrity } from './layers/gnss.js';
 import { createApplicationGhostMaps } from './layers/ghostMaps.js';
 import { createApplicationCables } from './layers/submarineCables.js';
 import { createApplicationStreetLevel } from './layers/streetLevel.js';
+import { createApplicationNature } from './layers/nature.js';
 import { createInfrastructureLayers } from '../data/infrastructure.js';
 import { localGeoJsonServices } from './localGeojsonServices.js';
 import { createBhoteKoshiEventLayer } from '../data/bhoteKoshiEvent.js';
@@ -169,6 +170,7 @@ export function createApplicationCatalog({
           clock: weatherClock,
         }),
         createCyclonesLayer({ feed: sources.cyclones }),
+        createApplicationNature(),
         ...createInfrastructureLayers(localGeoJsonServices),
         createApplicationCables({ source: sources.cables }),
         createApplicationFirms({

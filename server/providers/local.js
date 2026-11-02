@@ -29,6 +29,8 @@ import { gnssIntegrityProxy } from './gnssIntegrity.js';
 import { ghostMapsProxy } from './ghostMaps.js';
 import { cycloneProxy } from './cyclones.js';
 import { windProxy } from './wind.js';
+import { coralReefWatchProxy } from './coralReefWatch.js';
+import { reefScansProxy } from './reefScans.js';
 
 /**
  * Construct the local provider plugins in their established order.
@@ -62,6 +64,8 @@ function localProviderPlugins({ realtime, gemini } = {}) {
     windProxy(),
     weatherProxy(),
     cycloneProxy(),
+    coralReefWatchProxy(),
+    reefScansProxy(),
     mapillaryProxy(),
     firePerimetersProxy(),
     gnssIntegrityProxy(),

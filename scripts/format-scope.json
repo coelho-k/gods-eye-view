@@ -1119,5 +1119,19 @@
   "src/testSupport/shareViewFixtures.mjs",
   "src/ui/shareLinks.test.mjs",
   "src/ui/shareButton.test.mjs",
-  "src/share/shareLinkPath.test.mjs"
+  "src/share/shareLinkPath.test.mjs",
+  "src/app/layers/nature.js",
+  "src/layers/nature/compare.js",
+  "src/layers/nature/reefScans.js",
+  "src/layers/nature/reefScanView.js",
+  "src/layers/nature/reefScans.test.mjs",
+  "src/layers/nature/index.js",
+  "src/layers/nature/panel.js",
+  "src/layers/nature/products.js",
+  "src/layers/nature/source.js",
+  "src/layers/nature/products.test.mjs",
+  "server/providers/coralReefWatch.js",
+  "server/providers/reefScans.js",
+  "server/providers/reefScans.test.mjs",
+  "scripts/qa-nature.mjs"
 ]
